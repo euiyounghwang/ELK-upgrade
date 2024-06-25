@@ -9,8 +9,6 @@ from dotenv import load_dotenv
 load_dotenv() # will search for .env file in local folder and load variables 
 
 
-host = "https://tsgvm00877:9201"
-
 def elasticsearch_es():
     '''
     $ python ./request-test.py
@@ -37,7 +35,7 @@ def elasticsearch_es():
             'Authorization' : '{}'.format(os.getenv('BASIC_AUTH')),
             'Connection': 'close'
     }
-    es_client = Elasticsearch(hosts=host,
+    es_client = Elasticsearch(hosts=os.getenv("ES_HOST"),
                             #   headers=header,
                               http_auth=('test', 'test'),
                               verify_certs=False,
@@ -75,7 +73,7 @@ def request_es():
             'Connection': 'close'
     }
     # res = requests.get(url=host, auth=HTTPBasicAuth("test", "test"), verify=False)
-    res = requests.get(url=host, headers=header, verify=False)
+    res = requests.get(url=os.getenv("ES_HOST"), headers=header, verify=False)
     print(json.dumps(res.json(), indent=2))
 
 
