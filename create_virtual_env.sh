@@ -22,6 +22,7 @@ function activate_virtual_env() {
     
     echo "Create Poetry Environment"
     # Python 3.11.7 with Window
+    pip install --upgrade pip
     pip install poetry
     poetry install
     echo "Finish Poetry Environment Completely.."

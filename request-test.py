@@ -6,6 +6,7 @@ from elasticsearch import Elasticsearch, exceptions
 import os 
 from dotenv import load_dotenv
 
+''' pip install python-dotenv'''
 load_dotenv() # will search for .env file in local folder and load variables 
 
 
