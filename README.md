@@ -280,6 +280,38 @@ reindex.remote.whitelist: "*:9200"
 5) Restart Elasticsearch and check that the nodes come up
 - Test connection : https://localhost:9201
 - Run : /apps/elasticsearch/elasticsearch-8.12.2/bin/elasticsearch -d
+- Download sgctl tool script (https://maven.search-guard.com/search-guard-flx-release/com/floragunn/sgctl/)
+```bash
+- https://docs.search-guard.com/latest/manual-installation
+$ ./sgctl.sh
+Usage: sgctl [COMMAND]
+Remote control tool for Search Guard
+Commands:
+  connect          Tries to connect to a cluster and persists this connection
+                     for subsequent commands
+  get-config       Retrieves Search Guard configuration from the server to
+                     local files
+  update-config    Updates Search Guard configuration on the server from local
+                     files
+  migrate-config   Converts old-style sg_config.yml and kibana.yml into
+                     sg_authc.yml and sg_frontend_authc.yml
+  component-state  Retrieves Search Guard component status information
+  sgctl-licenses   Displays license information for sgctl
+  sgctl-version    Shows the version of this sgctl command
+  add-user-local   Adds a new user to a local sg_internal_users.yml file
+  add-user         Adds a new user
+  update-user      Updates a user
+  delete-user      Deletes a user
+  add-var          Adds a new configuration variable
+  update-var       Updates an existing configuration variable
+  delete-var       Deletes an existing configuration variable
+  set              Modifies a property in the Search Guard Configuration
+  update-license   Updates the SG license
+  rest             REST client for administration
+  special          Commands for special circumstances
+```
+
+- How to use sgctl tool script
 ```bash
 [localhost@localhost sgconfig]$ pwd
 /apps/elasticsearch/node1/elasticsearch-8.12.2/plugins/search-guard-flx/sgconfig
@@ -294,6 +326,23 @@ elasticsearch.yml.example  sg_action_groups.yml  sg_authc.yml  sg_authz.yml  sg_
 
 # Add User: 
 sudo /apps/elasticsearch/elasticsearch-8.12.2/plugins/search-guard-flx/tools/sgctl-2.0.0.sh add-user-local jdoe --backend-roles admin --password 1 -o /apps/elasticsearch/elasticsearch-8.12.2/plugins/search-guard-flx/sgconfig/sg_internal_users.yml
+
+[biadmin@tsgvm00877 ~]$ 
+sudo /apps/elasticsearch/elasticsearch-8.12.2/plugins/search-guard-flx/tools/sgctl-2.0.0.sh add-user-local user1 --backend-roles admin --password 1 -o /apps/elasticsearch/elasticsearch-8.12.2/plugins/search-guard-flx/sgconfig/sg_internal_users.yml
+Appending to /apps/elasticsearch/elasticsearch-8.12.2/plugins/search-guard-flx/sgconfig/sg_internal_users.yml
+
+
+sudo /apps/elasticsearch/elasticsearch-8.12.2/plugins/search-guard-flx/tools/sgctl-2.0.0.sh add-user-local user2 --backend-roles admin --password 1 -o /apps/elasticsearch/elasticsearch-8.12.2/plugins/search-guard-flx/sgconfig/sg_internal_users.yml
+Appending to /apps/elasticsearch/elasticsearch-8.12.2/plugins/search-guard-flx/sgconfig/sg_internal_users.yml
+
+# Delete User:  (It doesn't need to update configuation using sgctl tool script to ES cluster with Search Guard)
+[biadmin@tsgvm00877 ~]$ 
+sudo /apps/elasticsearch/elasticsearch-8.12.2/plugins/search-guard-flx/tools/sgctl-2.0.0.sh delete-user user2 --ca-cert /apps/elasticsearch/elasticsearch-8.12.2/config/root-ca.pem --cert /apps/elasticsearch/elasticsearch-8.12.2/config/kirk.pem --key /apps/elasticsearch/elasticsearch-8.12.2/config/kirk-key.pem --host tsgvm00877 --port 9201 --insecure
+--
+Successfully connected to cluster supplychain-logging-es8-dev (tsgvm00877) as user CN=kirk,OU=client,O=client,L=test,C=de
+Internal User user2 has been deleted
+--
+
 
 
 # Update-Config : 
