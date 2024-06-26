@@ -271,6 +271,46 @@ elasticsearch.yml.example  sg_action_groups.yml  sg_authc.yml  sg_authz.yml  sg_
 ```
 - Account Maintain : Add user to "/plugins/search-guard-flx/sgconfig/sg_internal_user.xml" (Use API : https://docs.search-guard.com/7.x-51/rest-api-internalusers, https://docs.search-guard.com/latest/sgctl, Base64 : https://www.encodebase64.net/, PlainText : <user>:<password>)
 ```bash
+
+- https://docs.search-guard.com/latest/manual-installation
+- https://docs.search-guard.com/latest/first-steps-user-configuration
+
+# Add User: 
+sudo /apps/elasticsearch/elasticsearch-8.12.2/plugins/search-guard-flx/tools/sgctl-2.0.0.sh add-user-local jdoe --backend-roles admin --password 1 -o /apps/elasticsearch/elasticsearch-8.12.2/plugins/search-guard-flx/sgconfig/sg_internal_users.yml
+
+
+# Update-Config : 
+
+1) Create a connectin for updating the configuration
+[biadmin@tsgvm00877 ~]$
+/apps/elasticsearch/elasticsearch-8.12.2/plugins/search-guard-flx/tools/sgctl-2.0.0.sh connect --host tsgvm00877 --port 9201 --ca-cert /apps/elasticsearch/elasticsearch-8.12.2/config/root-ca.pem --cert /apps/elasticsearch/elasticsearch-8.12.2/config/kirk.pem --key /apps/elasticsearch/elasticsearch-8.12.2/config/kirk-key.pem --insecure
+--
+Successfully connected to cluster supplychain-logging-es8-dev (tsgvm00877) as user CN=kirk,OU=client,O=client,L=test,C=de
+--
+
+2) Update configuration to add user
+[biadmin@tsgvm00877 ~]$
+/apps/elasticsearch/elasticsearch-8.12.2/plugins/search-guard-flx/tools/sgctl-2.0.0.sh update-config /apps/elasticsearch/elasticsearch-8.12.2/plugins/search-guard-flx/sgconfig/sg_internal_users.yml
+--
+Successfully connected to cluster supplychain-logging-es8-dev (tsgvm00877) as user CN=kirk,OU=client,O=client,L=test,C=de
+Configuration has been updated
+--
+
+3) Get configuration
+[biadmin@tsgvm00877 ~]$
+/apps/elasticsearch/elasticsearch-8.12.2/plugins/search-guard-flx/tools/sgctl-2.0.0.sh get-config -0 /apps/elasticsearch/elasticsearch-8.12.2/plugins/search-guard-flx/sgconfig/ --output ./
+
+
+
+-- Other Instance
+1) Create a connectin for updating the configuration
+./sgctl-2.0.0.sh connect --host tsgvm00877 --port 9201 --ca-cert ./search-guard-keys/dev/root-ca.pem --cert  ./search-guard-keys/dev/kirk.pem --key  ./search-guard-keys/dev/kirk-key.pem --insecure
+
+-bash-4.2$ ./sgctl-2.0.0.sh connect --host tsgvm00877 --port 9201 --ca-cert ./search-guard-keys/dev/root-ca.pem --cert  ./search-guard-keys/dev/kirk.pem --key  ./search-guard-keys/dev/kirk-key.pem --insecure
+Successfully connected to cluster supplychain-logging-es8-dev (tsgvm00877) as user CN=kirk,OU=client,O=client,L=test,C=de
+
+
+
 elastic:
   hash: "$2y$12$ScV8euAglZETM/H1xTuQkOP36raAW7ylOw/pVpF10QKja3RSW2aYu=-="
   reserved: false
