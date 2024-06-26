@@ -325,6 +325,8 @@ elasticsearch.yml.example  sg_action_groups.yml  sg_authc.yml  sg_authz.yml  sg_
 - https://docs.search-guard.com/latest/first-steps-user-configuration
 
 # Add User: 
+- if you already have a running cluster, you can also sgctl to directly create users on the cluster without modifying a local sg_internal_users.yml file first.
+
 sudo /apps/elasticsearch/elasticsearch-8.12.2/plugins/search-guard-flx/tools/sgctl-2.0.0.sh add-user-local jdoe --backend-roles admin --password 1 -o /apps/elasticsearch/elasticsearch-8.12.2/plugins/search-guard-flx/sgconfig/sg_internal_users.yml
 
 [biadmin@tsgvm00877 ~]$ 
@@ -332,8 +334,9 @@ sudo /apps/elasticsearch/elasticsearch-8.12.2/plugins/search-guard-flx/tools/sgc
 Appending to /apps/elasticsearch/elasticsearch-8.12.2/plugins/search-guard-flx/sgconfig/sg_internal_users.yml
 
 
-sudo /apps/elasticsearch/elasticsearch-8.12.2/plugins/search-guard-flx/tools/sgctl-2.0.0.sh add-user-local user2 --backend-roles admin --password 1 -o /apps/elasticsearch/elasticsearch-8.12.2/plugins/search-guard-flx/sgconfig/sg_internal_users.yml
+sudo /apps/elasticsearch/elasticsearch-8.12.2/plugins/search-guard-flx/tools/sgctl-2.0.0.sh add-user-local user3 --backend-roles readall,kibanauser --password 1 -o /apps/elasticsearch/elasticsearch-8.12.2/plugins/search-guard-flx/sgconfig/sg_internal_users.yml
 Appending to /apps/elasticsearch/elasticsearch-8.12.2/plugins/search-guard-flx/sgconfig/sg_internal_users.yml
+
 
 # Delete User:  (It doesn't need to update configuation using sgctl tool script to ES cluster with Search Guard)
 [biadmin@tsgvm00877 ~]$ 
@@ -355,12 +358,23 @@ Successfully connected to cluster supplychain-logging-es8-dev (tsgvm00877) as us
 --
 
 2) Update configuration to add user
+
 [biadmin@tsgvm00877 ~]$
+
 /apps/elasticsearch/elasticsearch-8.12.2/plugins/search-guard-flx/tools/sgctl-2.0.0.sh update-config /apps/elasticsearch/elasticsearch-8.12.2/plugins/search-guard-flx/sgconfig/sg_internal_users.yml
+
+/apps/elasticsearch/elasticsearch-8.12.2/plugins/search-guard-flx/tools/sgctl-2.0.0.sh update-config /apps/elasticsearch/elasticsearch-8.12.2/plugins/search-guard-flx/sgconfig/sg_internal_users.yml /apps/elasticsearch/elasticsearch-8.12.2/plugins/search-guard-flx/sgconfig/sg_roles.yml /apps/elasticsearch/elasticsearch-8.12.2/plugins/search-guard-flx/sgconfig/sg_roles_mapping.yml
 --
 Successfully connected to cluster supplychain-logging-es8-dev (tsgvm00877) as user CN=kirk,OU=client,O=client,L=test,C=de
 Configuration has been updated
 --
+
+# - ES Logs when run the update configuration
+[2024-06-26T17:21:09,643][INFO ][c.f.s.a.PrivilegesEvaluator] [supplychain-logging-es8-node#1] Updated authz config:
+[2024-06-26T17:25:05,415][INFO ][c.f.s.c.ConfigurationRepository] [supplychain-logging-es8-node#1] Index update done:
+'{"errors":false,"took":25,"items":[{"index":{"_index":".searchguard","_id":"rolesmapping","_version":17,"result":"updated","forced_refresh":true,"_shards":{"total":4,"successful":4,"failed":0},"_seq_no":173,"_primary_term":17,"status":200}},{"index":{"_index":".searchguard","_id":"roles","_version":22,"result":"updated","forced_refresh":true,"_shards":{"total":4,"successful":4,"failed":0},"_seq_no":174,"_primary_term":17,"status":200}},{"index":{"_index":".searchguard","_id":"internalusers","_version":131,"result":"updated","forced_refresh":true,"_shards":{"total":4,"successful":4,"failed":0},"_seq_no":175,"_primary_term":17,"status":200}}]}'
+[2024-06-26T17:25:05,422][INFO ][c.f.s.a.AuthorizationService] [supplychain-logging-es8-node#1] Updated authz config:
+
 
 3) Get configuration
 [biadmin@tsgvm00877 ~]$
@@ -552,6 +566,8 @@ elasticsearch.requestHeadersWhitelist: ["Authorization", "sgtenant"]
 
 
 /home/ES/kibana-7.9.0-linux-x86_64/plugins/searchguard/public/apps/loginlogin.html
+
+COPY /apps/kibana/kibana-8.12.2/plugins/searchguard/public/assets/searchguard_logo.svg from /home/biadmin/ELK_UPGRADE/searchguard_logo.svg
 
 # Run
 nohup /apps/kibana/kibana-8.12.2/bin/kibana &> /dev/null &
