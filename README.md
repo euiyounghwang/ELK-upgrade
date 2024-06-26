@@ -5,6 +5,9 @@
 FastAPI is a modern, fast (high-performance), web framework for building APIs with Python 3.8+ based on standard Python.
 This is a repository that provides to deliver the records to the Prometheus-Export application.
 
+Search Guard Is An Open Source Security Plugin For Elasticsearch And The Entire ELK stack. Search Guard Encrypts All Data In Transit. 
+- Search Guard Versions : https://docs-search--guard-com.webpkgcache.com/doc/-/s/docs.search-guard.com/latest/search-guard-versions
+- Account Maintain : Add user to "/plugins/search-guard-flx/sgconfig/sg_internal_user.xml" (Use API : https://docs.search-guard.com/7.x-51/rest-api-internalusers, https://docs.search-guard.com/latest/sgctl, Base64 : https://www.encodebase64.net/, PlainText : <user>:<password>)
 
 #### Python V3.9 Install
 ```bash
