@@ -7,9 +7,6 @@ SCRIPTDIR="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
 
 VENV=".venv"
 
-# Activate virtualenv && run serivce
-SCRIPTDIR="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
-
 # Python 3.11.7 with Window
 if [ -d "$VENV/bin" ]; then
     source $SCRIPTDIR/$VENV/bin/activate

@@ -33,6 +33,7 @@ pip install requests
 pip install pytz
 pip install httpx
 pip install python-dotenv
+pip install pandas
 
 # when error occur like this
 # ImportError: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'OpenSSL 1.0.2k-fips  26 Jan 2017'. See: https://github.com/urllib3/urllib3/issues/2168
@@ -54,6 +55,7 @@ poetry add pytz
 poetry add httpx
 poetry add python-dotenv
 poetry add pytest-cov
+peetry add pandas
 ```
 or you can run this shell script `./create_virtual_env.sh` to make an environment. then go to virtual enviroment using `source .venv/bin/activate`
 

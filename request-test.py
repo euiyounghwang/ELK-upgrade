@@ -5,6 +5,9 @@ import json
 from elasticsearch import Elasticsearch, exceptions
 import os 
 from dotenv import load_dotenv
+import warnings
+warnings.filterwarnings("ignore")
+
 
 ''' pip install python-dotenv'''
 load_dotenv() # will search for .env file in local folder and load variables 
@@ -37,8 +40,8 @@ def elasticsearch_es():
             'Connection': 'close'
     }
     es_client = Elasticsearch(hosts=os.getenv("ES_HOST"),
-                            #   headers=header,
-                              http_auth=('test', 'test'),
+                              headers=header,
+                            #   http_auth=('test', 'test'),
                               verify_certs=False,
                               max_retries=0,
                               timeout=5)
@@ -79,6 +82,7 @@ def request_es():
 
 
 if __name__ == '__main__':
+    '''  Adding certificate verification is strongly advised. See: https://urllib3.readthedocs.io/en/latest/advanced-usage.html#tls-warnings '''
     print('\n*****')
     request_es()
     print('\n*****')
