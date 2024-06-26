@@ -9,6 +9,8 @@ Search Guard Is An Open Source Security Plugin For Elasticsearch And The Entire 
 - Search Guard Versions : https://docs-search--guard-com.webpkgcache.com/doc/-/s/docs.search-guard.com/latest/search-guard-versions
 - Account Maintain : Add user to "/plugins/search-guard-flx/sgconfig/sg_internal_user.xml" (Use API : https://docs.search-guard.com/7.x-51/rest-api-internalusers, https://docs.search-guard.com/latest/sgctl, Base64 : https://www.encodebase64.net/, PlainText : <user>:<password>)
 - Basic authentication is a very simple authentication scheme that is built into the HTTP protocol. The client sends HTTP requests with the Authorization header that contains the Basic word followed by a space and a base64-encoded username:password string (: -> colon).
+- Secure Sockets Layer (SSL) is the technology responsible for data authentication and encryption for internet connections. It encrypts data being sent over the internet between two systems (commonly between a server and a client) so that it remains private. And with the growing importance of online privacy, an SSL port is something you should get familiar with.
+- Hypertext transfer protocol secure (HTTPS) is the secure version of HTTP, which is the primary protocol used to send data between a web browser and a website. HTTPS is encrypted in order to increase security of data transfer.  This is particularly important when users transmit sensitive data, such as by logging into a bank account, email service, or health insurance provider.
 
 
 
