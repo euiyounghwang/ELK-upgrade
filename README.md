@@ -5,6 +5,22 @@
 FastAPI is a modern, fast (high-performance), web framework for building APIs with Python 3.8+ based on standard Python.
 This is a repository that provides to deliver the records to the Prometheus-Export application.
 
+When a node fails, Elasticsearch will rebalance the cluster by moving shards from the failed node to the remaining nodes in the cluster. This ensures that all data is always available even if a node fails
+
+An Elasticsearch index consists of one or more primary shards. As of Elasticsearch version 7, the current default value for the number of primary shards per index is 1. In earlier versions, the default was 5 shards.
+- It depends on the query you used and how many documents with the size of each document  that you might have in daily or monthly. 
+- We can consider making a dynamic template explicitly to optimize for an index before creating the field. 
+- Shard size should not exceed 30-50GB (with a mathematical formula, Core number * The number of Nodes). Also we can consider avoiding ‘wild card query’, ‘script_query to calculate hits’ and retrieve only necessary fields when searching in query_string fields and highlighting.
+- Use filter context instead of query context because Elasticsearch does not need to calculate relevance score for filter context. 
+- Please note, the replica number should not be zero, otherwise you will have data loss.  In other words, as the number of replica shards increases, search performance should be increased and index performance decreased. Therefore, it is important to find the optimal number of shards according to the data size or the number of requests.
+- [Shards] Using the 30-80 GB value, you can calculate how many shards you’ll need. For instance, let’s assume you rotate indices monthly and expect around 600 GB of data per month. In this example, you would allocate 8 to 20 shards.
+
+
+- Typically the heap usage will be a saw tooth pattern, oscillating between around 30% and 70% of the maximum heap being used. This is because the JVM steadily increases heap usage percentage until the garbage collection process frees up memory again (When memory is insufficient, it is executed immediately when additional memory is requested).
+- The best practices for managing heap size usage and JVM garbage collection in a large Elasticsearch cluster are to ensure that the heap size is set to a maximum of 50% of the available RAM, and that the JVM garbage collection settings are optimized for the specific use case. It is important to monitor the heap size and garbage collection metrics to ensure that the cluster is running optimall
+
+
+
 Search Guard Is An Open Source Security Plugin For Elasticsearch And The Entire ELK stack. Search Guard Encrypts All Data In Transit. 
 - Search Guard Versions : https://docs-search--guard-com.webpkgcache.com/doc/-/s/docs.search-guard.com/latest/search-guard-versions
 - Account Maintain : Add user to "/plugins/search-guard-flx/sgconfig/sg_internal_user.xml" (Use API : https://docs.search-guard.com/7.x-51/rest-api-internalusers, https://docs.search-guard.com/latest/sgctl, Base64 : https://www.encodebase64.net/, PlainText : <user>:<password>)
