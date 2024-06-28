@@ -334,13 +334,17 @@ sudo /apps/elasticsearch/elasticsearch-8.12.2/plugins/search-guard-flx/tools/sgc
 Appending to /apps/elasticsearch/elasticsearch-8.12.2/plugins/search-guard-flx/sgconfig/sg_internal_users.yml
 
 
-sudo /apps/elasticsearch/elasticsearch-8.12.2/plugins/search-guard-flx/tools/sgctl-2.0.0.sh add-user-local user3 --backend-roles readall,kibanauser --password 1 -o /apps/elasticsearch/elasticsearch-8.12.2/plugins/search-guard-flx/sgconfig/sg_internal_users.yml
+sudo /apps/elasticsearch/elasticsearch-8.12.2/plugins/search-guard-flx/tools/sgctl-2.0.0.sh add-user-local user3 --backend-roles sg_guest,kibanauser --password 1 -o /apps/elasticsearch/elasticsearch-8.12.2/plugins/search-guard-flx/sgconfig/sg_internal_users.yml
 Appending to /apps/elasticsearch/elasticsearch-8.12.2/plugins/search-guard-flx/sgconfig/sg_internal_users.yml
 
+-- guest
+sudo /apps/elasticsearch/elasticsearch-8.12.2/plugins/search-guard-flx/tools/sgctl-2.0.0.sh add-user-local guest --backend-roles sg_guest,readall,kibanauser --password 1 -o /apps/elasticsearch/elasticsearch-8.12.2/plugins/search-guard-flx/sgconfig/sg_internal_users.yml
+
+Appending to /apps/elasticsearch/elasticsearch-8.12.2/plugins/search-guard-flx/sgconfig/sg_internal_users.yml
 
 # Delete User:  (It doesn't need to update configuation using sgctl tool script to ES cluster with Search Guard)
 [biadmin@tsgvm00877 ~]$ 
-sudo /apps/elasticsearch/elasticsearch-8.12.2/plugins/search-guard-flx/tools/sgctl-2.0.0.sh delete-user user2 --ca-cert /apps/elasticsearch/elasticsearch-8.12.2/config/root-ca.pem --cert /apps/elasticsearch/elasticsearch-8.12.2/config/kirk.pem --key /apps/elasticsearch/elasticsearch-8.12.2/config/kirk-key.pem --host tsgvm00877 --port 9201 --insecure
+sudo /apps/elasticsearch/elasticsearch-8.12.2/plugins/search-guard-flx/tools/sgctl-2.0.0.sh delete-user guest --ca-cert /apps/elasticsearch/elasticsearch-8.12.2/config/root-ca.pem --cert /apps/elasticsearch/elasticsearch-8.12.2/config/kirk.pem --key /apps/elasticsearch/elasticsearch-8.12.2/config/kirk-key.pem --host tsgvm00877 --port 9201 --insecure
 --
 Successfully connected to cluster supplychain-logging-es8-dev (tsgvm00877) as user CN=kirk,OU=client,O=client,L=test,C=de
 Internal User user2 has been deleted
@@ -575,7 +579,25 @@ nohup /apps/kibana/kibana-8.12.2/bin/kibana &> /dev/null &
 
 
 9) Logstash Configuration
-- Logstash Reference :https://princehood69.rssing.com/chan-69503895/article83.html
+- Logstash Reference :https://princehood69.rssing.com/chan-69503895/article83.html, https://m.blog.naver.com/inggi/221816427585
+- Path for Service
+
+```bash
+[logstash@tsgvm01605 system]$ systemctl status logstash.service
+● logstash.service - LSB: logstash
+   Loaded: loaded (/etc/rc.d/init.d/logstash; bad; vendor preset: disabled)
+   Active: active (running) since Wed 2024-06-19 08:42:25 EDT; 1 weeks 2 days ago
+     Docs: man:systemd-sysv-generator(8)
+  Process: 1213 ExecStart=/etc/rc.d/init.d/logstash start (code=exited, status=0/SUCCESS)
+   CGroup: /system.slice/logstash.service
+           └─1267 /apps/java/latest//bin/java -XX:+UseParNewGC -XX:+UseConcMarkSweepGC -XX:CMSInitiatingOccupancyFraction=75 -XX:+UseCMSInitiatingOccupancyOnly -XX:+DisableExplicitGC -Djava.awt.headless=true -Dfile.encoding=UTF-8 -XX:+HeapDumpOnOutOfMemoryError -Djava.security.egd=file:/dev/urandom -Dlo...
+[logstash@tsgvm01605 system]$ less /etc/rc.d/init.d/logstash
+[logstash@tsgvm01605 system]$
+```
+
+- Run with /config/conf.d/ : `/home/biadmin/ELK_UPGRADE/logstash-7.13.0/bin/logstash -f /home/biadmin/ELK_UPGRADE/logstash-7.13.0/config/conf.d/`
+- /apps/logstash/logstash-8.12.2/bin/logstash -f /apps/logstash/logstash-8.12.2/config/conf.d/ (QA1/QA2 with `logstash` account)
+
 ```bash
 input {
   stdin {}
