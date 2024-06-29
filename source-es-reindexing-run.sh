@@ -17,9 +17,16 @@ else
 fi
 
 source .env
-echo "Source Host - $S_HOST"
-echo "Target Host - $ES_HOST"
+# echo "Source Host - $S_HOST"
+# echo "Target Host - $ES_HOST"
+
+echo "Older ES Cluster : $1"
+echo "New ES Cluster :  $2"
+
 # --
 # default script for test indexing
-python $SCRIPTDIR/reindex-script/Search-reindexing-script.py --es $S_HOST --source_index om_nci_10052020_20_5_1 --ts $ES_HOST
+# python $SCRIPTDIR/reindex-script/Search-reindexing-script.py --es $S_HOST --source_index om_nci_10052020_20_5_1 --ts $ES_HOST
+# python $SCRIPTDIR/reindex-script/Search-reindexing-script.py --es $S_HOST --source_index om_nci_10052020_20_5_1 --ts $ES_HOST
+
+python $SCRIPTDIR/reindex-script/Search-reindexing-script.py --es $1 --source_index om_nci_10052020_20_5_1 --ts $2
 

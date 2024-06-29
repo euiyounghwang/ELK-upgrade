@@ -68,15 +68,15 @@ class Search():
         mapping = {
             "mappings": {
                 "properties": {
-                    "title": {
-                        "type": "text",
-                        "analyzer": "standard",
-                        "fields": {
-                            "keyword": {
-                                "type": "keyword"
-                            }
-                        }
-                    }
+                    # "title": {
+                    #     "type": "text",
+                    #     "analyzer": "standard",
+                    #     "fields": {
+                    #         "keyword": {
+                    #             "type": "keyword"
+                    #         }
+                    #     }
+                    # }
                 }
             }
         }

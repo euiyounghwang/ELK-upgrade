@@ -1,0 +1,81 @@
+# Click the Variables button, above, to create your own variables.
+
+
+GET _cat/indices
+
+GET _cluster/health
+
+# The main threadpools are for search, get and write, but there are a number of others which you can see by running: 
+# Scaling- a variable number of threads that Elasticsearch scales automatically according to workload.
+GET /_cat/thread_pool/?v&h=id,name,active,rejected,completed,size,type&pretty
+
+# Reindex
+POST _reindex?wait_for_completion=false
+{
+  "conflicts": "proceed",
+  "source": {
+    "remote": {
+      "host": "http://localhost:9200"
+    },
+    "index": "a",
+    "query": {
+      "match_all": {}
+    }
+  },
+  "dest": {
+    "op_type": "create", 
+    "index": "b"
+  }
+}
+
+
+GET _tasks?detailed=true&actions=*reindex
+
+POST _tasks/sjkFBoiRRfuV8Kv6yG9L1g:116418548/_cancel
+
+GET a/_doc/0000000870|NHP|WMXD001/
+
+GET a/_doc/0000009399|ONT004|WMXT001/
+
+
+# Alias migration
+GET _cat/aliases?v&format=json
+[
+  {
+    "alias": "wx_inv_holdtrans",
+    "index": "a",
+    "filter": "-",
+    "routing.index": "-",
+    "routing.search": "-"
+  },
+  ..
+]
+
+# Using pytest library
+POST _aliases
+{
+  "actions": [
+    {
+      "add": {
+        "index": "my-data-stream",
+        "alias": "my-alias"
+      }
+    }
+  ]
+}
+
+
+
+PUT _template/idx_default
+{
+  "index_patterns": [
+    "*"
+  ],
+  "settings": {
+    "number_of_shards": 10,
+    "number_of_replicas": 1
+  },
+  "mappings": {
+    "properties": {}
+  }
+}
