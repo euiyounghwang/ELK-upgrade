@@ -27,6 +27,23 @@ def work(es_source_client, es_target_client, src_idx, dest_idx):
     The Elasticsaerch Reindex API uses scroll and bulk indexing in batches , and allows for scripted transformation of data. 
     In Python, a similar routine could be developed:
     '''
+
+    def get_es_api_alias(source_es_client):
+        ''' get all alias and set to dict'''
+        get_alias_old_cluster = es_client.indices.get_alias()
+        # print(f"Get alias from old cluster : {json.dumps(get_alias_old_cluster, indent=2)}")
+
+        reset_alias_dict = {}
+        for k in get_alias_old_cluster.keys():
+            if get_alias_old_cluster.get(k).get('aliases'):
+                each_alias = list(get_alias_old_cluster.get(k).get('aliases').keys())
+                # print(each_alias)
+                reset_alias_dict.update({k : each_alias})
+        # print(json.dumps(reset_alias_dict, indent=2))
+        print(f"get_es_api_alias : {reset_alias_dict}")
+
+        return reset_alias_dict
+
     
     logging.info(f"{es_source_client, es_target_client, src_idx, dest_idx}")
     
@@ -37,6 +54,10 @@ def work(es_source_client, es_target_client, src_idx, dest_idx):
     
     es_obj_s = Search(host=es_source_client)
     es_client = es_obj_s.get_es_instance()
+
+    ''' get/set alias from old cluser'''
+    alias_dict = get_es_api_alias(es_client)
+    
     
     es_obj_t = Search(host=es_target_client)
     es_t_client = es_obj_t.get_es_instance()
@@ -94,6 +115,8 @@ def work(es_source_client, es_target_client, src_idx, dest_idx):
         }
     }
 
+    ''' set alias to target es cluster'''
+    es_t_client.indices.put_alias(dest_idx, alias_dict.get(dest_idx))
 
     es_t_client.indices.refresh(index=dest_idx)
     rs = es_t_client.search(index=[dest_idx],
